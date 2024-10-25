@@ -23,8 +23,6 @@ int partitionArray(vector<int>& nums, int k) {
 
 int main()
 {
-	/*vector<int> nums = { 2,2, 4, 5 };
-	cout << partitionArray(nums, 0);*/
-
-	cout << ("1245" + 99);
+	vector<int> nums = { 2,2, 4, 5 };
+	cout << partitionArray(nums, 0);
 }
