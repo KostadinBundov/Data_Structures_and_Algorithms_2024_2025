@@ -29,7 +29,7 @@ int partition(int* arr, size_t size) {
 	}
 }
 
-int partititon(int* arr, size_t size) {
+int secondPartition(int* arr, size_t size) {
 	if (arr[0] > arr[size - 1]) {
 		std::swap(arr[0], arr[size - 1]);
 	}
@@ -55,7 +55,13 @@ int partititon(int* arr, size_t size) {
 			break;
 		}
 
-		std::swap(arr[left], arr[right]);
+		if (arr[left] == arr[right]) {
+			left++;
+		}
+		else {
+			std::swap(arr[left], arr[right]);
+		}
+
 	}
 
 	std::swap(arr[left], pivot);
@@ -67,17 +73,17 @@ void quickSort(int* arr, size_t size) {
 		return;
 	}
 
-	int pivotIndex = partition(arr, size);
+	int pivotIndex = secondPartition(arr, size);
 	quickSort(arr, pivotIndex);
 	quickSort(arr + pivotIndex, size - pivotIndex);
 }
 
 int main()
 {
-	int arr[7]{ 3, 2, 3, 3, 3 };
+	int arr[6]{ 2, 1, 3, 4, 3, 5 };
 
-	quickSort(arr, 5);
-	for (int i = 0; i < 5; i++)
+	quickSort(arr, 6);
+	for (int i = 0; i < 6; i++)
 	{
 		std::cout << arr[i] << " ";
 	}

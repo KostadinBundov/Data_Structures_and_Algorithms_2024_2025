@@ -44,7 +44,7 @@ void rearrangeArray(std::vector<int>& arr) {
 }
 
 int main() {
-    std::vector<int> arr = { -1, 5, 3, 4, 0, -3, -4, -5, 1 };
+    std::vector<int> arr = { -1, 5, 3, 100, 0, -3, -100, -5, 1 };
 
     rearrangeArray(arr);
 
