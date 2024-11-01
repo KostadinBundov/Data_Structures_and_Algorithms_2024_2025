@@ -257,7 +257,6 @@ void Vector<T>::push_back(T&& element) {
 	if (_size >= _capacity) {
 		reserve(calculate_capacity());
 	}
-
 	new (&_data[_size++]) T(std::move(element));
 }
 
