@@ -7,35 +7,54 @@ struct ListNode {
 	ListNode() : val(0), next(nullptr) {}
 	ListNode(int x) : val(x), next(nullptr) {}
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
-	
+
 };
 
-ListNode* removeElements(ListNode* head, int val) {
-	while (head && head->val == val) {
-		head = head->next;
+ListNode* reverse(ListNode* head) {
+	ListNode* prev = nullptr;
+	ListNode* curr = head;
+	ListNode* next = nullptr;
+
+	while (curr) {
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
 	}
 
-	if (!head) {
-		return nullptr;
-	}
+	return prev;
+}
 
-	ListNode* newHead = head;
-	ListNode* current = head->next;
-	ListNode* prev = head;
-	
-	while (current) {
-		if (current->val == val) {
-			current = current->next;
-			prev->next = current;
+ListNode* doubleIt(ListNode* head) {
+	head = reverse(head);
+
+	ListNode* curr = head;
+	ListNode* prev = nullptr;
+
+	int additional = 0;
+
+	while (curr) {
+		curr->val = curr->val * 2 + additional;
+
+		if (curr->val > 9) {
+			additional = curr->val / 10;
+			curr->val %= 10;
 		}
 		else {
-			prev = current;
-			current = current->next;
+			additional = 0;
 		}
+
+		prev = curr;
+		curr = curr->next;
 	}
 
-	return newHead;
+	if (additional > 0) {
+		prev->next = new ListNode(additional);
+	}
+
+	return reverse(head);
 }
+
 
 ListNode* createLinkedList(const std::vector<int>& values) {
 	if (values.empty()) {
@@ -70,11 +89,9 @@ void printLinkedList(ListNode* head) {
 }
 
 int main() {
-	std::vector<int> arr = {  };
-	int val = 6;
+	std::vector<int> arr = { 9, 9, 9 };
 
 	ListNode* head = createLinkedList(arr);
-	head = removeElements(head, val);
-
+	head = doubleIt(head);
 	printLinkedList(head);
 }

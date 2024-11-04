@@ -7,34 +7,40 @@ struct ListNode {
 	ListNode() : val(0), next(nullptr) {}
 	ListNode(int x) : val(x), next(nullptr) {}
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
-	
+
 };
 
-ListNode* removeElements(ListNode* head, int val) {
-	while (head && head->val == val) {
-		head = head->next;
-	}
-
+ListNode* mergeNodes(ListNode* head) {
 	if (!head) {
 		return nullptr;
 	}
 
-	ListNode* newHead = head;
-	ListNode* current = head->next;
-	ListNode* prev = head;
-	
-	while (current) {
-		if (current->val == val) {
-			current = current->next;
-			prev->next = current;
-		}
-		else {
-			prev = current;
-			current = current->next;
-		}
+	if (!head->next) {
+		return head;
 	}
 
-	return newHead;
+	ListNode* curr = head;
+	ListNode* it = curr->next;
+
+	while (it) {
+		if (!it->next) {
+			break;
+		}
+
+		if (it->val != 0) {
+			curr->val += it->val;
+		}
+		else {
+			curr->next = it;
+			curr = curr->next;
+		}
+
+		it = it->next;
+	}
+
+	curr->next = nullptr;
+
+	return head;
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -70,11 +76,10 @@ void printLinkedList(ListNode* head) {
 }
 
 int main() {
-	std::vector<int> arr = {  };
-	int val = 6;
+	std::vector<int> arr = { 0,1,0,3,0,2,2,0 };
 
 	ListNode* head = createLinkedList(arr);
-	head = removeElements(head, val);
+	head = mergeNodes(head);
 
 	printLinkedList(head);
 }

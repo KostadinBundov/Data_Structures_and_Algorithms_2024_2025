@@ -7,34 +7,45 @@ struct ListNode {
 	ListNode() : val(0), next(nullptr) {}
 	ListNode(int x) : val(x), next(nullptr) {}
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
-	
+
 };
 
-ListNode* removeElements(ListNode* head, int val) {
-	while (head && head->val == val) {
-		head = head->next;
+ListNode* reverseBetween(ListNode* head, int left, int right) {
+	if (!head->next || left == right) {
+		return head;
 	}
 
-	if (!head) {
-		return nullptr;
+	ListNode* prev = nullptr;
+	ListNode* curr = head;
+
+	for (int i = 1; i < left; i++) {
+		prev = curr;
+		curr = curr->next;
 	}
 
-	ListNode* newHead = head;
-	ListNode* current = head->next;
-	ListNode* prev = head;
-	
-	while (current) {
-		if (current->val == val) {
-			current = current->next;
-			prev->next = current;
-		}
-		else {
-			prev = current;
-			current = current->next;
-		}
+	ListNode* next = nullptr;
+	ListNode* leftTail = prev;
+	ListNode* reverseTail = curr;
+
+	while (left <= right) {
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
+
+		left++;
 	}
 
-	return newHead;
+	if (leftTail) {
+		leftTail->next = prev;
+	}
+	else {
+		head = prev;
+	}
+
+	reverseTail->next = curr;
+
+	return head;
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -70,11 +81,12 @@ void printLinkedList(ListNode* head) {
 }
 
 int main() {
-	std::vector<int> arr = {  };
-	int val = 6;
+	std::vector<int> arr = { 3, 5 };
+	int left = 1;
+	int right = 2;
 
 	ListNode* head = createLinkedList(arr);
-	head = removeElements(head, val);
+	head = reverseBetween(head, left, right);
 
 	printLinkedList(head);
 }

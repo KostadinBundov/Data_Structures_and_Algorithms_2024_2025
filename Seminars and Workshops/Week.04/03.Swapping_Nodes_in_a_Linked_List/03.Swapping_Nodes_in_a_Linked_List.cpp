@@ -7,34 +7,35 @@ struct ListNode {
 	ListNode() : val(0), next(nullptr) {}
 	ListNode(int x) : val(x), next(nullptr) {}
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
-	
+
 };
 
-ListNode* removeElements(ListNode* head, int val) {
-	while (head && head->val == val) {
-		head = head->next;
+ListNode* swapNodes(ListNode* head, int k) {
+	ListNode* firstNode = head;
+
+	for (int i = 1; i < k; i++) {
+		firstNode = firstNode->next;
 	}
 
-	if (!head) {
-		return nullptr;
-	}
+	ListNode* secondNode = head;
+	ListNode* buffer = head;
 
-	ListNode* newHead = head;
-	ListNode* current = head->next;
-	ListNode* prev = head;
-	
-	while (current) {
-		if (current->val == val) {
-			current = current->next;
-			prev->next = current;
+	while (buffer->next) {
+		buffer = buffer->next;
+
+		if (k > 1) {
+			k--;
 		}
 		else {
-			prev = current;
-			current = current->next;
+			secondNode = secondNode->next;
 		}
 	}
 
-	return newHead;
+	int temp = firstNode->val;
+	firstNode->val = secondNode->val;
+	secondNode->val = temp;
+
+	return head;
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -70,11 +71,9 @@ void printLinkedList(ListNode* head) {
 }
 
 int main() {
-	std::vector<int> arr = {  };
-	int val = 6;
+	std::vector<int> arr = { 7,9,6,6,7,8,3,0,9,5 };
 
 	ListNode* head = createLinkedList(arr);
-	head = removeElements(head, val);
-
+	head = swapNodes(head, 5);
 	printLinkedList(head);
 }

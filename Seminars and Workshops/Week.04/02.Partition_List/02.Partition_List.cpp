@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <vector>
 
 struct ListNode {
 	int val;
@@ -8,35 +9,85 @@ struct ListNode {
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
-ListNode* swapNodes(ListNode* head, int k) {
-    ListNode* first = head;
-    ListNode* second = head;
-    ListNode* current = head;
+ListNode* partition(ListNode* head, int x) {
+    ListNode* leftHead = nullptr;
+    ListNode* rightHead = nullptr;
+    ListNode* currentLeft = nullptr;
+    ListNode* currentRight = nullptr;
 
-    for (int i = 1; i < k; i++) {
-        first = first->next;
-    }
-
-    ListNode* kthFromBeginning = first;
-
-    while (current->next) {
-        current = current->next;
-        if (k > 1) {
-            k--;
+    while (head) {
+        if (head->val < x) {
+            if (!leftHead) {
+                leftHead = head;
+                currentLeft = leftHead;
+            }
+            else {
+                currentLeft->next = head;
+                currentLeft = currentLeft->next;
+            }
         }
         else {
-            second = second->next;
+            if (!rightHead) {
+                rightHead = head;
+                currentRight = rightHead;
+            }
+            else {
+                currentRight->next = head;
+                currentRight = currentRight->next;
+            }
         }
+
+        head = head->next;
     }
 
-    int temp = kthFromBeginning->val;
-    kthFromBeginning->val = second->val;
-    second->val = temp;
+    if (currentLeft) {
+        currentLeft->next = rightHead;
+    }
+    if (currentRight) {
+        currentRight->next = nullptr;
+    }
+
+    return leftHead ? leftHead : rightHead;
+}
+
+
+
+ListNode* createLinkedList(const std::vector<int>& values) {
+    if (values.empty()) {
+        return nullptr;
+    }
+
+    ListNode* head = new ListNode(values[0]);
+    ListNode* current = head;
+
+    for (size_t i = 1; i < values.size(); ++i) {
+        current->next = new ListNode(values[i]);
+        current = current->next;
+    }
 
     return head;
 }
 
-int main()
-{
+void printLinkedList(ListNode* head) {
+    ListNode* current = head;
 
+    while (current) {
+        std::cout << current->val;
+
+        if (current->next) {
+            std::cout << " -> ";
+        }
+
+        current = current->next;
+    }
+
+    std::cout << std::endl;
+}
+
+int main() {
+    std::vector<int> arr = { 1,4,3,2,5,2 };
+
+    ListNode* head = createLinkedList(arr);
+    head = partition(head, 3);
+    printLinkedList(head);
 }
