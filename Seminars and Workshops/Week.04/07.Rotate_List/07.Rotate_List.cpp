@@ -68,6 +68,14 @@ void printLinkedList(ListNode* head) {
 	std::cout << std::endl;
 }
 
+void free(ListNode* list) {
+	while (list) {
+		ListNode* toDel = list;
+		list = list->next;
+		delete toDel;
+	}
+}
+
 int main() {
 	std::vector<int> arr = { 1, 2, 3, 4, 5 };
 	int k = 1;
@@ -76,4 +84,5 @@ int main() {
 	head = rotateRight(head, k);
 
 	printLinkedList(head);
+	free(head);
 }

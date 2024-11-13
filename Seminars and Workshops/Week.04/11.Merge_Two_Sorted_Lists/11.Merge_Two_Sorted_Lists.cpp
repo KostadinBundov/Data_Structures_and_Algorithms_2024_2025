@@ -10,37 +10,50 @@ struct ListNode {
 
 };
 
-ListNode* mergeNodes(ListNode* head) {
-	if (!head) {
-		return nullptr;
+void pushBack(ListNode*& begin, ListNode*& end, ListNode* curr) {
+	if (!begin) {
+		begin = end = curr;
 	}
-
-	if (!head->next) {
-		return head;
+	else {
+		end->next = curr;
+		end = end->next;
 	}
+}
 
-	ListNode* curr = head;
-	ListNode* it = curr->next;
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+	ListNode* resultBegin = nullptr;
+	ListNode* resultEnd = nullptr;
 
-	while (it) {
-		if (!it->next) {
-			break;
-		}
-
-		if (it->val != 0) {
-			curr->val += it->val;
+	while (list1 && list2) {
+		if (list1->val < list2->val) {
+			pushBack(resultBegin, resultEnd, list1);
+			list1 = list1->next;
 		}
 		else {
-			curr->next = it;
-			curr = curr->next;
+			pushBack(resultBegin, resultEnd, list2);
+			list2 = list2->next;
 		}
-
-		it = it->next;
 	}
 
-	curr->next = nullptr;
+	
 
-	return head;
+	if (list1) {
+		pushBack(resultBegin, resultEnd, list1);
+	}
+	
+	if (list2) {
+		pushBack(resultBegin, resultEnd, list2);
+	}
+
+	return resultBegin;
+}
+
+void free(ListNode* list) {
+	while (list) {
+		ListNode* toDel = list;
+		list = list->next;
+		delete toDel;
+	}
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -75,20 +88,10 @@ void printLinkedList(ListNode* head) {
 	std::cout << std::endl;
 }
 
-void free(ListNode* list) {
-	while (list) {
-		ListNode* toDel = list;
-		list = list->next;
-		delete toDel;
-	}
-}
-
 int main() {
-	std::vector<int> arr = { 0,1,0,3,0,2,2,0 };
-
-	ListNode* head = createLinkedList(arr);
-	head = mergeNodes(head);
-
+	ListNode* l1 = createLinkedList({ });
+	ListNode* l2 = createLinkedList({ 0 });
+	ListNode* head = mergeTwoLists(l1, l2);
 	printLinkedList(head);
 	free(head);
 }

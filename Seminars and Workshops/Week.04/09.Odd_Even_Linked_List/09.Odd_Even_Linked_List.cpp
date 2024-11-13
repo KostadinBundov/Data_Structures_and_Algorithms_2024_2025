@@ -10,42 +10,49 @@ struct ListNode {
 
 };
 
-ListNode* reverseBetween(ListNode* head, int left, int right) {
-	if (!head->next || left == right) {
-		return head;
-	}
-
-	ListNode* prev = nullptr;
-	ListNode* curr = head;
-
-	for (int i = 1; i < left; i++) {
-		prev = curr;
-		curr = curr->next;
-	}
-
-	ListNode* next = nullptr;
-	ListNode* leftTail = prev;
-	ListNode* reverseTail = curr;
-
-	while (left <= right) {
-		next = curr->next;
-		curr->next = prev;
-		prev = curr;
-		curr = next;
-
-		left++;
-	}
-
-	if (leftTail) {
-		leftTail->next = prev;
+void pushBack(ListNode*& begin, ListNode*& end, ListNode* curr) {
+	if (!begin) {
+		begin = end = curr;
 	}
 	else {
-		head = prev;
+		end->next = curr;
+		end = curr;
+	}
+}
+
+ListNode* oddEvenList(ListNode* head) {
+	ListNode* oddHead = nullptr;
+	ListNode* oddTail = nullptr;
+	ListNode* evenHead = nullptr;
+	ListNode* evenTail = nullptr;
+	ListNode* curr = head;
+
+	int index = 1;
+
+	while (curr) {
+		if (index & 1) {
+			pushBack(oddHead, oddTail, curr);
+		}
+		else {
+			pushBack(evenHead, evenTail, curr);
+		}
+
+		curr = curr->next;
+		index++;
 	}
 
-	reverseTail->next = curr;
+	if (oddHead) {
+		oddTail->next = evenHead;
+	}
+	else {
+		oddHead = evenHead;
+	}
 
-	return head;
+	if (evenTail) { 
+		evenTail->next = nullptr;
+	}
+
+	return oddHead;
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -89,13 +96,8 @@ void free(ListNode* list) {
 }
 
 int main() {
-	std::vector<int> arr = { 3, 5 };
-	int left = 1;
-	int right = 2;
-
-	ListNode* head = createLinkedList(arr);
-	head = reverseBetween(head, left, right);
-
+	ListNode* f1 = createLinkedList({ 2,1,3,5,6,4,7 });
+	ListNode* head = oddEvenList(f1);
 	printLinkedList(head);
 	free(head);
 }

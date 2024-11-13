@@ -66,9 +66,18 @@ ListNode* createLinkedList(const std::vector<int>& values) {
 	return head;
 }
 
+void free(ListNode* list) {
+	while (list) {
+		ListNode* toDel = list;
+		list = list->next;
+		delete toDel;
+	}
+}
+
 int main() {
 	std::vector<int> arr = { 1,1,2,1, 1 };
 
 	ListNode* head = createLinkedList(arr);
 	std::cout << isPalindrome(head);
+	free(head);
 }

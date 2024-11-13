@@ -10,37 +10,42 @@ struct ListNode {
 
 };
 
-ListNode* swapNodes(ListNode* head, int k) {
-	int index = k - 1;
-	ListNode** firstPtr = &head;
-
+ListNode* findNodeByIndex(ListNode* list, int index) {
 	for (int i = 0; i < index; i++) {
-		firstPtr = &((*firstPtr)->next);
+		list = list->next;
 	}
 
-	ListNode** secondPtr = &head;
-	ListNode* buffer = head;
+	return list;
+}
 
-	while (buffer->next) {
-		buffer = buffer->next;
+void free(ListNode* list) {
+	while (list) {
+		ListNode* toDel = list;
+		list = list->next;
+		delete toDel;
+	}
+}
 
-		if (k > 1) {
-			k--;
-		}
-		else {
-			secondPtr = &((*secondPtr)->next);
-		}
+ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+
+	ListNode* leftTail = findNodeByIndex(list1, a - 1);
+	ListNode* toDeleteHead = findNodeByIndex(list1, a);
+	leftTail->next = list2;
+
+	ListNode* toDeleteTail = findNodeByIndex(toDeleteHead, b - a);
+
+	ListNode* rightHead = list2;
+
+	while (rightHead->next) {
+		rightHead = rightHead->next;
 	}
 
-	ListNode* temp = *firstPtr;
-	*firstPtr = *secondPtr;
-	*secondPtr = temp;
+	rightHead->next = toDeleteTail->next;
+	toDeleteTail->next = nullptr;
 
-	temp = (*firstPtr)->next;
-	(*firstPtr)->next = (*secondPtr)->next;
-	(*secondPtr)->next = temp;
+	free(toDeleteHead);
 
-	return head;
+	return list1;
 }
 
 ListNode* createLinkedList(const std::vector<int>& values) {
@@ -75,19 +80,10 @@ void printLinkedList(ListNode* head) {
 	std::cout << std::endl;
 }
 
-void free(ListNode* list) {
-	while (list) {
-		ListNode* toDel = list;
-		list = list->next;
-		delete toDel;
-	}
-}
-
 int main() {
-	std::vector<int> arr = { 1, 2, 3, 4, 5, 6  };
-
-	ListNode* head = createLinkedList(arr);
-	head = swapNodes(head, 1);
+	ListNode* l1 = createLinkedList({ 10,1,13,6,9,5 });
+	ListNode* l2 = createLinkedList({ 1000000,1000001,1000002 });
+	ListNode* head = mergeInBetween(l1, 3, 4, l2);
 	printLinkedList(head);
 	free(head);
 }

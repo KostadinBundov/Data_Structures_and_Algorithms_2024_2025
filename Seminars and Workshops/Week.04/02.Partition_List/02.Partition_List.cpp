@@ -84,10 +84,19 @@ void printLinkedList(ListNode* head) {
     std::cout << std::endl;
 }
 
+void free(ListNode* list) {
+    while (list) {
+        ListNode* toDel = list;
+        list = list->next;
+        delete toDel;
+    }
+}
+
 int main() {
     std::vector<int> arr = { 1,4,3,2,5,2 };
 
     ListNode* head = createLinkedList(arr);
     head = partition(head, 3);
     printLinkedList(head);
+    free(head);
 }
