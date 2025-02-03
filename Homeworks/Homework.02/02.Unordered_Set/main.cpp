@@ -14,8 +14,12 @@ void testEraseIf() {
     mySet.insert("apple");
     mySet.insert("banana");
     mySet.insert("cherry");
+    mySet.insert("12345");
+
     mySet.insert("example");
     mySet.insert("test");
+    mySet.insert("abbsd");
+    mySet.insert("1234");
 
     std::cout << "Set elements before erase_if:" << std::endl;
     for (auto it = mySet.cbegin(); it != mySet.cend(); ++it) {
