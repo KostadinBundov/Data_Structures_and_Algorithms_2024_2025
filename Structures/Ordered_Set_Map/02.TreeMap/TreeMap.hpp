@@ -147,7 +147,7 @@ public:
 			Node** leaf = findMinElement(&toDel->right);
 
 			*curr = *leaf;
-			*leaf = nullptr;
+			*leaf = (*leaf)->right;
 			(*curr)->left = toDel->left;
 			(*curr)->right = toDel->right;
 		}
@@ -195,7 +195,7 @@ public:
 		}
 
 		const std::pair<Key, Value>& operator*() const { return s.top()->data; }
-		const std::pair<Key, Value>* operator->() const { return s.top()->data; }
+		const std::pair<Key, Value>* operator->() const { return &s.top()->data; }
 
 		ConstIterator& operator++() {
 			Node* curr = s.top();
